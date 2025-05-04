@@ -10,7 +10,15 @@ load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:3000'])
+# Allow CORS from multiple origins
+allowed_origins = [
+    'http://localhost:3000',  # Local development
+    'https://stock-portfolio-frontend.vercel.app',  # Vercel deployment
+    os.getenv('CORS_ORIGINS', '')  # Additional origins from environment
+]
+# Filter out empty strings
+allowed_origins = [origin for origin in allowed_origins if origin]
+CORS(app, origins=allowed_origins)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Get API key from environment variables or use default for development
