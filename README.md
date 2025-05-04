@@ -121,4 +121,12 @@ MIT
 ## Acknowledgments
 
 - Financial data provided by [Financial Modeling Prep API](https://financialmodelingprep.com/)
-- Market overview widget powered by [TradingView](https://www.tradingview.com/) 
+- Market overview widget powered by [TradingView](https://www.tradingview.com/)
+
+## Deployment
+
+This project can be deployed for free using Render (backend) and Vercel (frontend).
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+For detailed deployment instructions, please see [DEPLOYMENT.md](DEPLOYMENT.md). 

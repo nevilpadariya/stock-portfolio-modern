@@ -1,73 +1,65 @@
-# Deployment Guide for Stock Portfolio App
+# Simplified Deployment Guide
 
-This guide provides instructions for deploying the Stock Portfolio application using Render (backend) and Vercel (frontend) for free.
+This guide provides easy-to-follow instructions for deploying your Stock Portfolio application using free services.
 
-## Backend Deployment on Render
+## 1. Backend Deployment (Render)
 
-### Step 1: Create a Render Account
-Sign up for a free account at [Render](https://render.com/) if you don't have one.
+### Option 1: One-click Deploy with Blueprint (Easiest)
 
-### Step 2: Create a New Web Service
-1. Click "New" and select "Web Service"
-2. Connect your GitHub repository
-3. Configure the service:
-   - Name: `stock-portfolio-backend` (or your preferred name)
-   - Environment: `Python`
-   - Region: Choose one closest to your target users
-   - Branch: `main` (or your default branch)
-   - Root Directory: `backend` (important!)
+1. Create a Render account at [render.com](https://render.com)
+2. Click this button: [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/YOUR_USERNAME/stock-portfolio-modern)
+3. Follow the prompts to connect your GitHub repository
+4. Important: Add your API key in the environment variables section
+5. Click "Apply"
+
+### Option 2: Manual Deployment
+
+1. Sign up at [render.com](https://render.com)
+2. From your dashboard, click "New" → "Web Service"
+3. Connect your GitHub repository
+4. Configure as follows:
+   - Name: `stock-portfolio-backend`
+   - Root Directory: `backend`
+   - Runtime: `Python 3`
    - Build Command: `pip install -r requirements.txt`
-   - Start Command: `gunicorn wsgi:app`
+   - Start Command: `python start.py`
    - Plan: Free
+5. Add environment variable:
+   - `API_KEY`: Your Financial Modeling Prep API key
+   - `FLASK_ENV`: `production`
+6. Click "Create Web Service"
 
-### Step 3: Add Environment Variables
-Add the following environment variables in Render dashboard:
-- `API_KEY`: Your Financial Modeling Prep API key
-- `FLASK_ENV`: `production`
-- `CORS_ORIGINS`: Your Vercel frontend URL (e.g., https://stock-portfolio-frontend.vercel.app)
+## 2. Frontend Deployment (Vercel)
 
-## Frontend Deployment on Vercel
-
-### Step 1: Create a Vercel Account
-Sign up for a free account at [Vercel](https://vercel.com/) if you don't have one.
-
-### Step 2: Import your GitHub Repository
-1. Click "Add New..." and select "Project"
-2. Import your GitHub repository
-3. Configure the project:
+1. Sign up at [vercel.com](https://vercel.com)
+2. From dashboard, click "Add New..." → "Project"
+3. Import your GitHub repository
+4. Configure as follows:
    - Framework Preset: `Create React App`
    - Root Directory: `frontend`
-   - Build Command: `npm run build`
-   - Output Directory: `build`
+   - Build Command: Leave default (`npm run build`)
+   - Output Directory: Leave default (`build`)
+5. Add environment variable:
+   - `REACT_APP_API_URL`: Your Render backend URL (e.g., `https://stock-portfolio-backend.onrender.com`)
+6. Click "Deploy"
 
-### Step 3: Add Environment Variables
-Add the following environment variable in Vercel dashboard:
-- `REACT_APP_API_URL`: Your Render backend URL (e.g., https://stock-portfolio-backend.onrender.com)
+## Connecting Frontend to Backend
 
-### Step 4: Deploy
-Click "Deploy" and wait for the deployment to complete.
+Once both are deployed:
 
-## Verifying the Deployment
+1. Copy your Render backend URL (e.g., `https://stock-portfolio-backend.onrender.com`)
+2. Go to your Vercel project → Settings → Environment Variables
+3. Add or update `REACT_APP_API_URL` with your backend URL
+4. Redeploy the frontend by triggering a new deployment
 
-1. Visit your frontend URL (provided by Vercel) to check if the application is working correctly.
-2. Test the API connection by making a request to your backend URL + `/api/health`.
+## Testing Your Deployed App
+
+1. Access your frontend URL (provided by Vercel)
+2. Try to fetch investment strategies and create a portfolio
+3. If it works, congratulations! Your app is deployed 🎉
 
 ## Troubleshooting
 
-### CORS Issues
-If you encounter CORS issues:
-1. Check that your backend CORS configuration includes your Vercel domain.
-2. Verify that your API URL in the frontend is correct.
-
-### API Key Issues
-If the stock data isn't loading:
-1. Check that you've added your API key to the Render environment variables.
-2. Verify that the key is valid by testing it directly with the Financial Modeling Prep API.
-
-## Redeploying Changes
-
-### Backend (Render)
-Render automatically redeploys when you push changes to your connected repository.
-
-### Frontend (Vercel)
-Vercel automatically redeploys when you push changes to your connected repository. 
+- **CORS Errors**: The backend is configured to accept requests from any origin in production mode
+- **API Issues**: Make sure you've added your API key to Render environment variables
+- **Deployment Failures**: Check build logs in Render/Vercel for specific error messages 
