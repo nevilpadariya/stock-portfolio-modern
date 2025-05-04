@@ -17,7 +17,7 @@ Sign up for a free account at [Render](https://render.com/) if you don't have on
    - Branch: `main` (or your default branch)
    - Root Directory: `backend` (important!)
    - Build Command: `pip install -r requirements.txt`
-   - Start Command: `gunicorn app:app`
+   - Start Command: `gunicorn wsgi:app`
    - Plan: Free
 
 ### Step 3: Add Environment Variables
