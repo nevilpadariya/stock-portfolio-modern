@@ -5,42 +5,97 @@ body {
   padding: 0;
   background-color: #f5f7fa;
   transition: background-color 0.3s ease;
+  text-wrap: wrap;
 }
 
 /* Dark mode transition */
 body.dark-mode {
   background-color: #121212;
   color: #e0e0e0;
+  
 }
 
-/* Card animations and transitions */
+body .MuiTypography-root{text-wrap: wrap;}
+/* Card grid for stock cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  text-wrap: wrap;
+}
+
+/* Card shadow */
 .card-shadow {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-radius: 8px;
 }
 
 .card-shadow:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Dark mode card styles */
-body.dark-mode .card-shadow {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode .card-shadow:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-}
-
-/* Stock card styling */
+/* Card colors based on performance */
 .card-positive {
-  border-top: 3px solid #4caf50;
+  border-left: 4px solid #4caf50;
 }
 
 .card-negative {
-  border-top: 3px solid #f44336;
+  border-left: 4px solid #f44336;
+}
+
+/* Page header styling - ChatGPT style */
+.page-header h1 {
+  color: var(--mui-palette-text-primary);
+  position: relative;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.page-header h1::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: #10a37f;
+  border-radius: 1px;
+}
+
+/* Custom scrollbar - ChatGPT style */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(16, 163, 127, 0.5);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 163, 127, 0.8);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Text utilities */

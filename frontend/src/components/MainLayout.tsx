@@ -31,7 +31,7 @@ interface MainLayoutProps {
   title?: string;
 }
 
-const MainLayout: React.FC<MainLayoutProps> = ({ children, title = 'Stock Portfolio Suggestion Engine' }) => {
+const MainLayout: React.FC<MainLayoutProps> = ({ children, title = 'Investmate - Smart Investment Portfolio Engine' }) => {
   const location = useLocation();
   const isMobile = useMediaQuery('(max-width:768px)');
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -80,9 +80,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, title = 'Stock Portfo
       <AppBar 
         position="sticky" 
         color="default" 
-        elevation={1} 
+        elevation={0} 
         sx={{ 
-          bgcolor: theme.palette.mode === 'dark' ? 'background.paper' : 'white'
+          background: theme.palette.mode === 'dark' 
+            ? '#343541' 
+            : '#ffffff',
+          borderBottom: theme.palette.mode === 'dark' 
+            ? '1px solid rgba(255, 255, 255, 0.1)' 
+            : '1px solid rgba(0, 0, 0, 0.1)'
         }}
       >
         <Toolbar>

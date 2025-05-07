@@ -234,7 +234,7 @@ const HomePage: React.FC = () => {
   ];
   
   return (
-    <MainLayout title="Stock Portfolio Suggestion Engine">
+    <MainLayout title="Stock Investment Suggestion Engine">
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ p: 2 }}>

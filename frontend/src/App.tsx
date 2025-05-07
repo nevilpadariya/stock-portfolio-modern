@@ -29,23 +29,35 @@ const LoadingComponent = () => (
 const AppContent = () => {
   const { darkMode } = useTheme();
   
-  // Create a theme based on the dark/light mode
+  // Create a theme based on the dark/light mode - ChatGPT inspired
   const theme = useMemo(() => createTheme({
     palette: {
       mode: darkMode ? 'dark' : 'light',
       primary: {
-        main: darkMode ? '#90caf9' : '#1976d2',
+        main: darkMode ? '#10a37f' : '#10a37f', // ChatGPT green for both modes
+        light: darkMode ? '#1db894' : '#1db894',
+        dark: darkMode ? '#0a8c6c' : '#0a8c6c',
       },
       secondary: {
-        main: darkMode ? '#f48fb1' : '#f50057',
+        main: darkMode ? '#444654' : '#f7f7f8', // ChatGPT secondary colors
+        light: darkMode ? '#5a5c6d' : '#ffffff',
+        dark: darkMode ? '#343541' : '#ececf1',
       },
       background: {
-        default: darkMode ? '#121212' : '#f5f7fa',
-        paper: darkMode ? '#1e1e1e' : '#ffffff',
+        default: darkMode ? '#343541' : '#ffffff',
+        paper: darkMode ? '#444654' : '#f7f7f8',
       },
       text: {
-        primary: darkMode ? '#e0e0e0' : '#121212',
-        secondary: darkMode ? '#aaaaaa' : '#666666',
+        primary: darkMode ? '#ffffff' : '#343541',
+        secondary: darkMode ? '#c5c5d2' : '#6e6e80',
+      },
+      success: {
+        main: '#10a37f',
+        dark: '#0a8c6c',
+      },
+      error: {
+        main: '#ef4146',
+        dark: '#dc3545',
       },
     },
     typography: {
@@ -71,13 +83,17 @@ const AppContent = () => {
       MuiCard: {
         styleOverrides: {
           root: {
-            borderRadius: 8,
-            transition: 'all 0.3s ease',
+            borderRadius: 6,
+            transition: 'all 0.2s ease',
+            boxShadow: 'none',
+            border: darkMode 
+              ? '1px solid rgba(255, 255, 255, 0.1)' 
+              : '1px solid rgba(0, 0, 0, 0.1)',
             '&:hover': {
-              transform: 'translateY(-5px)',
+              transform: 'translateY(-2px)',
               boxShadow: darkMode 
-                ? '0 8px 20px rgba(0, 0, 0, 0.5)' 
-                : '0 8px 20px rgba(0, 0, 0, 0.15)',
+                ? '0 4px 15px rgba(0, 0, 0, 0.3)' 
+                : '0 4px 15px rgba(0, 0, 0, 0.1)',
             },
           },
         },
@@ -85,9 +101,43 @@ const AppContent = () => {
       MuiButton: {
         styleOverrides: {
           root: {
-            borderRadius: 6,
+            borderRadius: 4,
             textTransform: 'none',
             fontWeight: 500,
+            padding: '8px 16px',
+            boxShadow: 'none',
+          },
+          contained: {
+            '&:hover': {
+              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+            },
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            borderRadius: 6,
+            boxShadow: 'none',
+            border: darkMode 
+              ? '1px solid rgba(255, 255, 255, 0.1)' 
+              : '1px solid rgba(0, 0, 0, 0.1)',
+          },
+        },
+      },
+      MuiDivider: {
+        styleOverrides: {
+          root: {
+            borderColor: darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+          },
+        },
+      },
+      MuiTextField: {
+        styleOverrides: {
+          root: {
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 4,
+            },
           },
         },
       },

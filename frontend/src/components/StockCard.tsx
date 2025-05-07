@@ -85,7 +85,12 @@ const StockCard: React.FC<StockCardProps> = ({ stock, amount }) => {
           cursor: 'pointer',
           height: '100%',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          border: `1px solid ${isPositive ? 'rgba(76, 175, 80, 0.3)' : 'rgba(244, 67, 54, 0.3)'}`,
+          background: isPositive 
+            ? 'linear-gradient(to bottom right, rgba(76, 175, 80, 0.05), rgba(255, 255, 255, 0))' 
+            : 'linear-gradient(to bottom right, rgba(244, 67, 54, 0.05), rgba(255, 255, 255, 0))',
+          transition: 'all 0.3s ease'
         }}
         onClick={showDetails}
       >
