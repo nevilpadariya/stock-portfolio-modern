@@ -52,7 +52,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, title = 'Stock Portfo
       <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            Stock Portfolio
+            Investmate
           </Link>
         </Typography>
         <ThemeToggle />
@@ -104,7 +104,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, title = 'Stock Portfo
             sx={{ fontWeight: 'bold', flexGrow: 1 }}
           >
             <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-              Stock Portfolio
+              Investmate
             </Link>
           </Typography>
 
@@ -182,8 +182,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children, title = 'Stock Portfo
         }}
       >
         <Typography variant="body2" color="text.secondary">
-          Stock Portfolio Suggestion Engine ©{new Date().getFullYear()} | 
-          Data provided by Financial Modeling Prep API
+          Stock Investment Suggestion Engine ©{new Date().getFullYear()} | 
+          for CMPE 285
         </Typography>
       </Paper>
     </Box>

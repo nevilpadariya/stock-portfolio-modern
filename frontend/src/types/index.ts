@@ -8,6 +8,15 @@ export interface Stock {
   change: number;
   changePercent: number;
   latestTime?: string;
+  shares?: number;
+  allocated_amount?: number;
+  current_value?: number;
+}
+
+// Portfolio history item
+export interface HistoryItem {
+  date: string;
+  value: number;
 }
 
 // Investment strategy options
@@ -27,6 +36,7 @@ export interface Allocation {
 export interface StrategyResult {
   strategy: InvestmentStrategy;
   stocks: Stock[];
+  strategy_value?: number;
 }
 
 // Portfolio result
@@ -37,6 +47,9 @@ export interface PortfolioResult {
   };
   allocation: Allocation;
   results: StrategyResult[];
+  portfolio_id?: string;
+  total_value?: number;
+  history?: HistoryItem[];
 }
 
 // Form values

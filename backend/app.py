@@ -4,6 +4,7 @@ import requests
 from flask import Flask, request, Response, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+from datetime import datetime
 
 # Load environment variables
 load_dotenv()
@@ -38,6 +39,8 @@ STRATEGY_STOCKS = {
     "Value Investing": ["INTC", "BABA", "GE"]
 }
 
+PORTFOLIO_HISTORY = {}
+
 def get_stock_quote(stock_list):
     """
     Get stock quotes for a list of stock tickers from Financial Modeling Prep API
@@ -69,6 +72,37 @@ def get_stock_quote(stock_list):
             app.logger.error(f"Error fetching data for {ticker}: {str(e)}")
     
     return stock_quote
+
+def generate_portfolio_id(amount, strategies):
+    """Generate a unique identifier for a portfolio based on amount and strategies"""
+    # Sort strategies to ensure consistent IDs regardless of order
+    sorted_strategies = sorted(strategies)
+    return f"{amount}_{'-'.join(sorted_strategies)}"
+
+def update_portfolio_history(portfolio_id, total_value):
+    """Update the history of a portfolio with current value"""
+    today = datetime.now().strftime("%Y-%m-%d")
+    
+    if portfolio_id not in PORTFOLIO_HISTORY:
+        PORTFOLIO_HISTORY[portfolio_id] = []
+    
+    # Add today's value
+    PORTFOLIO_HISTORY[portfolio_id].append({
+        "date": today,
+        "value": total_value
+    })
+    
+    # Keep only the last 5 entries (5 days of history)
+    PORTFOLIO_HISTORY[portfolio_id] = PORTFOLIO_HISTORY[portfolio_id][-5:]
+    
+    return PORTFOLIO_HISTORY[portfolio_id]
+
+def get_portfolio_history(portfolio_id):
+    """Get the history of a portfolio"""
+    if portfolio_id not in PORTFOLIO_HISTORY:
+        return []
+    
+    return PORTFOLIO_HISTORY[portfolio_id]
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -116,6 +150,7 @@ def generate_portfolio():
         
         # Get stock quotes for each strategy
         strategy_results = []
+        total_portfolio_value = 0
         
         for strategy in strategies:
             if strategy not in STRATEGY_STOCKS:
@@ -123,10 +158,33 @@ def generate_portfolio():
                 
             stocks = STRATEGY_STOCKS[strategy]
             quotes = get_stock_quote(stocks)
+            
+            # Calculate current value of these stocks
+            strategy_value = 0
+            for i, stock in enumerate(quotes):
+                # Calculate shares based on allocation
+                shares = allocation["amounts"][i] / stock["price"]
+                current_value = shares * stock["price"]
+                strategy_value += current_value
+                
+                # Add shares to stock info
+                stock["shares"] = shares
+                stock["allocated_amount"] = allocation["amounts"][i]
+                stock["current_value"] = current_value
+            
+            total_portfolio_value += strategy_value
+            
             strategy_results.append({
                 "strategy": strategy,
-                "stocks": quotes
+                "stocks": quotes,
+                "strategy_value": strategy_value
             })
+        
+        # Generate a unique portfolio ID
+        portfolio_id = generate_portfolio_id(amount, strategies)
+        
+        # Update portfolio history
+        history = update_portfolio_history(portfolio_id, total_portfolio_value)
         
         # Prepare response
         result = {
@@ -135,7 +193,10 @@ def generate_portfolio():
                 "strategies": strategies
             },
             "allocation": allocation,
-            "results": strategy_results
+            "results": strategy_results,
+            "portfolio_id": portfolio_id,
+            "total_value": total_portfolio_value,
+            "history": history
         }
         
         return jsonify(result)
@@ -143,6 +204,13 @@ def generate_portfolio():
     except Exception as e:
         app.logger.error(f"Error processing request: {str(e)}")
         return jsonify({"error": "An internal server error occurred"}), 500
+
+# Add a new endpoint to get portfolio history
+@app.route('/api/portfolio/history/<portfolio_id>', methods=['GET'])
+def portfolio_history(portfolio_id):
+    """Get the history of a portfolio"""
+    history = get_portfolio_history(portfolio_id)
+    return jsonify({"history": history})
 
 # Run the app
 if __name__ == "__main__":

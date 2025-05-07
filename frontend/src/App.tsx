@@ -9,6 +9,7 @@ import { ThemeProvider as CustomThemeProvider, useTheme } from './context/ThemeC
 // Lazy load pages for better performance
 const HomePage = lazy(() => import('./pages/HomePage'));
 const ResultsPage = lazy(() => import('./pages/ResultsPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
 
 // Loading component
 const LoadingComponent = () => (
@@ -100,6 +101,7 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/results" element={<ResultsPage />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>
       </Suspense>

@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import MainLayout from '../components/MainLayout';
 import StockCard from '../components/StockCard';
+import PortfolioHistoryChart from '../components/PortfolioHistoryChart';
 import { PortfolioResult, InvestmentStrategy, Stock } from '../types';
 import apiService from '../services/api';
 
@@ -149,6 +150,21 @@ const ResultsPage: React.FC = () => {
                 No stock recommendations available at this time.
               </Alert>
             )}
+            
+            {/* Portfolio History Chart */}
+            <Box sx={{ mt: 4 }}>
+              <Typography variant="h5" align="center" gutterBottom>
+                Portfolio Value - 5 Day Trend
+              </Typography>
+              {portfolioData.history && portfolioData.history.length > 0 ? (
+                <PortfolioHistoryChart history={portfolioData.history} />
+              ) : (
+                <Alert severity="info" sx={{ my: 2 }}>
+                  <AlertTitle>Portfolio History</AlertTitle>
+                  No historical data available yet. Check back tomorrow to see your portfolio trend!
+                </Alert>
+              )}
+            </Box>
           </>
         ) : null}
       </Card>

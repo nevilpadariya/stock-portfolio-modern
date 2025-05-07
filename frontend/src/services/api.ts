@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { InvestmentStrategy, PortfolioResult } from '../types';
 
-// Get API base URL from environment or use Render URL as fallback
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://stock-portfolio-backend.onrender.com';
+// Get API base URL from environment or use localhost as fallback
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
 // Create axios instance with defaults
 const api = axios.create({
