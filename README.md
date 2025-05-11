@@ -110,7 +110,7 @@ See the individual README files in the backend and frontend directories for more
 
 - **Frontend**:
   - React 18 with TypeScript
-  - Ant Design component library
+  - Material UI library
   - Recharts for data visualization
   - TradingView widget integration
 
