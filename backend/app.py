@@ -4,7 +4,8 @@ import requests
 from flask import Flask, request, Response, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, timedelta
+import random
 
 # Load environment variables
 load_dotenv()
@@ -80,20 +81,47 @@ def generate_portfolio_id(amount, strategies):
     return f"{amount}_{'-'.join(sorted_strategies)}"
 
 def update_portfolio_history(portfolio_id, total_value):
-    """Update the history of a portfolio with current value"""
+    """Update the history of a portfolio with current value and generate sample history if needed"""
     today = datetime.now().strftime("%Y-%m-%d")
     
     if portfolio_id not in PORTFOLIO_HISTORY:
+        # Generate mock historical data for the last 5 days
         PORTFOLIO_HISTORY[portfolio_id] = []
-    
-    # Add today's value
-    PORTFOLIO_HISTORY[portfolio_id].append({
-        "date": today,
-        "value": total_value
-    })
-    
-    # Keep only the last 5 entries (5 days of history)
-    PORTFOLIO_HISTORY[portfolio_id] = PORTFOLIO_HISTORY[portfolio_id][-5:]
+        base_value = total_value * 0.95  # Start at 95% of current value
+        
+        # Generate data for past 4 days + today
+        for i in range(4, -1, -1):
+            past_date = (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d")
+            # Small random fluctuation (±3%)
+            fluctuation = random.uniform(-0.03, 0.03)
+            past_value = base_value * (1 + fluctuation)
+            base_value = past_value  # Each day builds on the previous
+            
+            # Add the historical data point
+            PORTFOLIO_HISTORY[portfolio_id].append({
+                "date": past_date,
+                "value": round(past_value, 2)
+            })
+        
+        # Set the last day (today) to the actual value
+        PORTFOLIO_HISTORY[portfolio_id][-1] = {
+            "date": today,
+            "value": total_value
+        }
+    else:
+        # If history exists, just update today's value
+        # Check if today's entry exists
+        if PORTFOLIO_HISTORY[portfolio_id][-1]["date"] == today:
+            # Update today's value
+            PORTFOLIO_HISTORY[portfolio_id][-1]["value"] = total_value
+        else:
+            # Add a new day
+            PORTFOLIO_HISTORY[portfolio_id].append({
+                "date": today,
+                "value": total_value
+            })
+            # Keep only the last 5 entries (5 days of history)
+            PORTFOLIO_HISTORY[portfolio_id] = PORTFOLIO_HISTORY[portfolio_id][-5:]
     
     return PORTFOLIO_HISTORY[portfolio_id]
 

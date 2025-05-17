@@ -28,7 +28,8 @@ import {
   CheckCircle as CheckCircleIcon
 } from '@mui/icons-material';
 import MainLayout from '../components/MainLayout';
-import TradingViewWidget from '../components/TradingViewWidget';
+import MarketOverviewCard from '../components/MarketOverviewCard';
+import StockMarquee from '../components/StockMarquee';
 import { InvestmentStrategy } from '../types';
 import apiService from '../services/api';
 
@@ -41,12 +42,16 @@ const HomePage: React.FC = () => {
   const [strategies, setStrategies] = useState<InvestmentStrategy[]>([]);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    amount: 0,
+    amount: 0 as number | string,
     strategies: [] as InvestmentStrategy[]
   });
   const [errors, setErrors] = useState({
     amount: false,
     strategies: false
+  });
+  const [errorMessages, setErrorMessages] = useState({
+    amount: '',
+    strategies: ''
   });
   
   useEffect(() => {
@@ -77,27 +82,53 @@ const HomePage: React.FC = () => {
         ...errors,
         [field]: false
       });
+      setErrorMessages({
+        ...errorMessages,
+        [field]: ''
+      });
     }
   };
   
   // Validate current step
   const validateStep = (): boolean => {
     const newErrors = { ...errors };
+    const newErrorMessages = { ...errorMessages };
     let isValid = true;
     
     if (activeStep === 0) {
-      if (!formData.amount || formData.amount < MIN_INVESTMENT) {
+      // Check for empty amount or non-numeric input
+      if (formData.amount === 0 || 
+          formData.amount === null || 
+          formData.amount === undefined || 
+          isNaN(Number(formData.amount)) || 
+          typeof formData.amount === 'string') {
         newErrors.amount = true;
+        newErrorMessages.amount = "Please select a valid amount.";
+        isValid = false;
+      } 
+      // Check for minimum amount
+      else if (formData.amount < MIN_INVESTMENT) {
+        newErrors.amount = true;
+        newErrorMessages.amount = "Please select a valid amount.";
         isValid = false;
       }
     } else if (activeStep === 1) {
-      if (!formData.strategies.length || formData.strategies.length > 2) {
+      // Check for no strategy selected
+      if (!formData.strategies.length) {
         newErrors.strategies = true;
+        newErrorMessages.strategies = "Please select at-least 1 Investment strategy.";
+        isValid = false;
+      } 
+      // Check for too many strategies selected
+      else if (formData.strategies.length > 2) {
+        newErrors.strategies = true;
+        newErrorMessages.strategies = "Select maximum of 2 Investment strategies.";
         isValid = false;
       }
     }
     
     setErrors(newErrors);
+    setErrorMessages(newErrorMessages);
     return isValid;
   };
   
@@ -148,15 +179,18 @@ const HomePage: React.FC = () => {
               id="amount-input"
               startAdornment={<InputAdornment position="start">$</InputAdornment>}
               label="Investment Amount"
-              type="number"
+              type="text"
               value={formData.amount || ''}
-              onChange={(e) => handleInputChange('amount', Number(e.target.value))}
-              inputProps={{ min: MIN_INVESTMENT }}
-              placeholder="Minimum $5000"
+              onChange={(e) => {
+                const val = e.target.value;
+                handleInputChange('amount', val === '' ? 0 : isNaN(Number(val)) ? val : Number(val));
+              }}
+              placeholder={`Minimum $${MIN_INVESTMENT}`}
+              required
             />
             {errors.amount && (
               <FormHelperText error>
-                Please enter an amount of at least ${MIN_INVESTMENT}
+                {errorMessages.amount || `Please enter an amount of at least $${MIN_INVESTMENT}`}
               </FormHelperText>
             )}
           </FormControl>
@@ -178,6 +212,7 @@ const HomePage: React.FC = () => {
               onChange={(e) => handleInputChange('strategies', e.target.value)}
               label="Investment Strategies"
               renderValue={(selected) => (selected as string[]).join(', ')}
+              required
             >
               {strategies.map((strategy) => (
                 <MenuItem 
@@ -189,9 +224,9 @@ const HomePage: React.FC = () => {
                 </MenuItem>
               ))}
             </Select>
-            <FormHelperText>
+            <FormHelperText error={errors.strategies}>
               {errors.strategies 
-                ? 'Please select 1 or 2 investment strategies'
+                ? errorMessages.strategies || 'Please select 1 or 2 investment strategies'
                 : 'Select up to 2 investment strategies'}
             </FormHelperText>
           </FormControl>
@@ -235,6 +270,16 @@ const HomePage: React.FC = () => {
   
   return (
     <MainLayout title="Stock Investment Suggestion Engine">
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h6" align="center" gutterBottom>
+          Popular Stocks
+        </Typography>
+        <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 2 }}>
+          Click on any stock to view detailed information
+        </Typography>
+        <StockMarquee />
+      </Box>
+    
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ p: 2 }}>
@@ -345,6 +390,14 @@ const HomePage: React.FC = () => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                       <Paper variant="outlined" sx={{ p: 2 }}>
+                        <Typography variant="subtitle1" gutterBottom>Quality Investing</Typography>
+                        <Typography variant="body2">
+                          Focus on financially strong companies with stable earnings.
+                        </Typography>
+                      </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Paper variant="outlined" sx={{ p: 2 }}>
                         <Typography variant="subtitle1" gutterBottom>Value Investing</Typography>
                         <Typography variant="body2">
                           Seek undervalued stocks with strong fundamentals.
@@ -377,15 +430,7 @@ const HomePage: React.FC = () => {
       
       <Divider sx={{ my: 4 }} />
       
-      <Card sx={{ p: 3 }}>
-        <Typography variant="h5" align="center" gutterBottom>
-          Market Overview
-        </Typography>
-        <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
-          Stay informed with real-time market data to make better investment decisions
-        </Typography>
-        <TradingViewWidget />
-      </Card>
+      <MarketOverviewCard />
     </MainLayout>
   );
 };

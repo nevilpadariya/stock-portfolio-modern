@@ -23,6 +23,7 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 import { Stock } from '../types';
+import EnhancedStockChart from './EnhancedStockChart';
 
 interface StockCardProps {
   stock: Stock;
@@ -60,9 +61,12 @@ const StockCard: React.FC<StockCardProps> = ({ stock, amount }) => {
           .slice(0, 25)
           .reverse()
           .map((item: any) => ({
-            label: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-            close: item.close,
+            date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            value: item.close,
             open: item.open,
+            high: item.high,
+            low: item.low,
+            volume: item.volume
           }));
           
         setChartData(transformedData);
@@ -201,35 +205,20 @@ const StockCard: React.FC<StockCardProps> = ({ stock, amount }) => {
                 </Box>
               </Box>
 
-              <Box sx={{ height: 350, width: '100%' }}>
-                <ResponsiveContainer>
-                  <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 25 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="label">
-                      <Label value="Date" offset={0} position="bottom" />
-                    </XAxis>
-                    <YAxis 
-                      label={{ value: 'Price ($)', angle: -90, position: 'insideLeft' }} 
-                      domain={['dataMin - 5', 'dataMax + 5']}
-                    />
-                    <Tooltip formatter={(value) => [`$${value}`, 'Price']} />
-                    <Legend verticalAlign="top" height={36} />
-                    <Line
-                      type="monotone"
-                      dataKey="close"
-                      stroke="#4caf50"
-                      activeDot={{ r: 8 }}
-                      name="Close Price"
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="open" 
-                      stroke="#1976d2" 
-                      name="Open Price" 
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+              <Box sx={{ height: 400, width: '100%', mb: 2 }}>
+                {chartData.length > 0 && (
+                  <EnhancedStockChart 
+                    data={chartData}
+                    symbol={stock.symbol}
+                    name={stock.companyName || stock.name}
+                    height={350}
+                  />
+                )}
               </Box>
+              
+              <Typography variant="body2" color="text.secondary" align="center">
+                Hover over the chart to see detailed price information
+              </Typography>
             </>
           )}
         </DialogContent>

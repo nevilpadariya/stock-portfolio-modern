@@ -10,6 +10,7 @@ import { ThemeProvider as CustomThemeProvider, useTheme } from './context/ThemeC
 const HomePage = lazy(() => import('./pages/HomePage'));
 const ResultsPage = lazy(() => import('./pages/ResultsPage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
+const StockDetailPage = lazy(() => import('./pages/StockDetailPage'));
 
 // Loading component
 const LoadingComponent = () => (
@@ -152,6 +153,7 @@ const AppContent = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/results" element={<ResultsPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/stock/:symbol" element={<StockDetailPage />} />
           <Route path="*" element={<HomePage />} />
         </Routes>
       </Suspense>
