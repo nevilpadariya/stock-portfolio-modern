@@ -36,7 +36,7 @@ const ResultsPage: React.FC = () => {
         const strategies = params.getAll('strategy') as InvestmentStrategy[];
         
         // Validate query parameters
-        if (!amount || isNaN(amount) || amount < 5000) {
+        if (!amount || isNaN(amount) || amount < 4999) {
           setError('Invalid investment amount. Please enter at least $5,000.');
           setLoading(false);
           return;

@@ -161,8 +161,8 @@ def generate_portfolio():
         if not strategies or not amount:
             return jsonify({"error": "Strategies and amount are required"}), 400
             
-        if not isinstance(amount, (int, float)) or amount < 5001:
-            return jsonify({"error": "Amount must be a number at least 5001"}), 400
+        if not isinstance(amount, (int, float)) or amount < 5000:
+            return jsonify({"error": "Amount must be a number at least 5000"}), 400
             
         if not isinstance(strategies, list) or len(strategies) > 2:
             return jsonify({"error": "Strategies must be a list with at most 2 items"}), 400
