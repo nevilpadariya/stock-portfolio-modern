@@ -65,7 +65,7 @@ const StockDetailPage: React.FC = () => {
       
       try {
         setLoading(true);
-        const apiKey = 'nGNYeJajsvrBRZnZ4rq1Gmj7shiF9Ytf';
+        const apiKey = '14chOYTjZ9ecu8iqCVPqYnzWE53RlwXI';
         
         // Fetch stock profile data
         const [quoteResponse, profileResponse, historicalResponse] = await Promise.all([

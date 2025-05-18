@@ -50,7 +50,7 @@ const StockCard: React.FC<StockCardProps> = ({ stock, amount }) => {
     
     try {
       // Get stock history data from Financial Modeling Prep API
-      const apiKey = 'nGNYeJajsvrBRZnZ4rq1Gmj7shiF9Ytf'; // Using the same API key as backend
+      const apiKey = '14chOYTjZ9ecu8iqCVPqYnzWE53RlwXI'; // Updated to match backend API key
       const response = await axios.get(
         `https://financialmodelingprep.com/api/v3/historical-price-full/${stock.symbol}?timeseries=25&apikey=${apiKey}`
       );
