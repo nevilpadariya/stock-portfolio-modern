@@ -64,7 +64,7 @@ const StockMarquee: React.FC = () => {
       try {
         // List of popular stock symbols
         const popularSymbols = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'V', 'DIS'];
-        const apiKey = 'nGNYeJajsvrBRZnZ4rq1Gmj7shiF9Ytf'; // Same API key used elsewhere
+        const apiKey = '14chOYTjZ9ecu8iqCVPqYnzWE53RlwXI'; // Updated to match backend API key
         
         // Fetch real-time quotes for these symbols
         const response = await axios.get(

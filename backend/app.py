@@ -29,7 +29,7 @@ else:
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Get API key from environment variables or use default for development
-API_KEY = os.getenv('API_KEY', 'nGNYeJajsvrBRZnZ4rq1Gmj7shiF9Ytf')
+API_KEY = os.getenv('API_KEY', '14chOYTjZ9ecu8iqCVPqYnzWE53RlwXI')
 
 # Stock lists for different investment strategies
 STRATEGY_STOCKS = {
